@@ -30,7 +30,7 @@ export function ProjectForm() {
   };
 
   return (
-    <form onSubmit={handleSudmit} className="w-2/5">
+    <form onSubmit={handleSudmit} className="w-4/5">
       {error && <p>{error.message}</p>}
       <input
         type="text"
@@ -48,7 +48,7 @@ export function ProjectForm() {
       />
       <button
         disabled={!project.name || !project.description || loading}
-        className="bg-green-500 px-4 py-1 rounded-md text-lg mb-3 disabled:bg-zinc-400"
+        className="bg-green-500 px-4 py-1 rounded-md text-lg mb-3 hover:bg-green-400 disabled:bg-zinc-400"
       >
         Save
       </button>

@@ -6,7 +6,6 @@ export function ProjectList() {
   const { loading, error, data } = useQuery(GET_PROJECTS);
   if (loading) return <p>Loading</p>;
   if (error) return <p>Error</p>;
-  console.log(data);
   return (
     <div className="overflow-y-auto h-96 w-full px-5">
       {data.projects.map((project) => (

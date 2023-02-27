@@ -34,3 +34,14 @@ export const CREATE_PROJECT = gql`
     }
   }
 `;
+
+export const DELETED_PROJECT = gql`
+  mutation ($id: ID!) {
+    deleteProject(_id: $id) {
+      name
+      description
+      _id
+      createdAt
+    }
+  }
+`;

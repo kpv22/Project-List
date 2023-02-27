@@ -20,16 +20,25 @@ export function TasksForm() {
     e.target.title.focus();
   };
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="title"
-        className="bg-zinc-900 text-white w-full p-2 rounded-lg mb-2"
-        placeholder="Add a Task"
-      />
-      <button className="bg-green-500 text-white w-full p-2 rounded-lg">
-        Add
-      </button>
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-full w-11/12 flex justify-between"
+    >
+      <div className="flex w-full">
+        <input
+          type="text"
+          name="title"
+          className="bg-zinc-900 text-white w-full p-2 rounded-lg mb-0 text-lg"
+          placeholder="Add a Task"
+          style={{ minWidth: 0 }}
+        />
+        <button
+          className="bg-green-500 text-white px-3 py-2 rounded-lg text-lg ml-2 mb-2 hover:bg-green-400"
+          style={{ height: "100%" }}
+        >
+          Add
+        </button>
+      </div>
     </form>
   );
 }
