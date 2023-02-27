@@ -8,7 +8,7 @@ export function ProjectList() {
   if (error) return <p>Error</p>;
   console.log(data);
   return (
-    <div>
+    <div className="overflow-y-auto h-96 w-full px-5">
       {data.projects.map((project) => (
         <ProjectCard key={project._id} project={project} />
       ))}
