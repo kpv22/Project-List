@@ -41,10 +41,10 @@ export function ProjectForm() {
       />
       <textarea
         name="description"
-        rows="3"
+        rows="4"
         placeholder="Write a description"
         onChange={handleChange}
-        className="bg-zinc-800 text-white rounded-lg shadow-lg p-4 block w-full mb-3"
+        className="bg-zinc-800 text-white rounded-lg shadow-lg p-4 block w-full mb-3 resize-none"
       />
       <button
         disabled={!project.name || !project.description || loading}

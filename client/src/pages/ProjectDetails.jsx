@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_PROJECT } from "../graphql/projects";
 import { TasksList } from "../components/tasks/TasksList";
@@ -16,15 +16,24 @@ export function ProjectDetails() {
   if (error) return <p>Error!</p>;
 
   return (
-    <div className="">
-      <div>
-        <h1 className="text-2x1">{data.project.name}</h1>
-        <p>{data.project.description}</p>
+    <div>
+      <Link to="/projects">
+        <button className="bg-green-500 text-white px-3 py-2 rounded-lg">
+          Back
+        </button>
+      </Link>
+      <div className="bg-zinc-900 mb-2 p-10 flex justify-between">
+        <div>
+          <h1 className="text-2x1">{data.project.name}</h1>
+          <p>{data.project.description}</p>
+        </div>
       </div>
-
-      <button className="bg-red-500 px-3 py-2">Delete</button>
-      <TasksForm />
-      <TasksList tasks={data.project.tasks} />
+      <button className="bg-red-500 px-3 py-2 rounded-lg">Delete</button>
+      <br></br>
+      <div>
+        <TasksForm />
+        <TasksList tasks={data.project.tasks} />
+      </div>
     </div>
   );
 }
