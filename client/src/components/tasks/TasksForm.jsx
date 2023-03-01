@@ -1,44 +1,63 @@
 import { useMutation } from "@apollo/client";
 import { CREATE_TASK } from "../../graphql/tasks";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function TasksForm() {
   const params = useParams();
-  const [createTask] = useMutation(CREATE_TASK, {
+  const [createTask, { loading }] = useMutation(CREATE_TASK, {
     refetchQueries: [`getProject`],
   });
+  const [showToast, setShowToast] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await createTask({
-      variables: {
-        title: e.target.title.value,
-        projectId: params.id,
-      },
-    });
-    e.target.reset();
-    e.target.title.focus();
+    const title = e.target.title.value;
+    try {
+      await createTask({
+        variables: {
+          title,
+          projectId: params.id,
+        },
+      });
+      e.target.reset();
+      e.target.title.focus();
+    } catch (error) {
+      setShowToast(true);
+      toast.error(error.message, {
+        position: "top-left",
+        closeOnClick: true,
+        autoClose: 3000,
+        theme: "dark",
+      });
+    }
   };
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-full w-11/12 flex justify-between"
-    >
-      <div className="flex w-full">
-        <input
-          type="text"
-          name="title"
-          className="bg-zinc-900 text-white w-full p-2 rounded-lg mb-0 text-lg"
-          placeholder="Add a Task"
-          style={{ minWidth: 0 }}
-        />
-        <button
-          className="bg-green-500 text-white px-3 py-2 rounded-lg text-lg ml-2 mb-2 hover:bg-green-400"
-          style={{ height: "100%" }}
-        >
-          Add
-        </button>
-      </div>
-    </form>
+    <div>
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-full w-11/12 flex justify-between mb-2"
+      >
+        <div className="flex w-full">
+          <input
+            type="text"
+            name="title"
+            className="bg-zinc-900 text-white w-full p-2 rounded-lg mb-0 text-lg"
+            placeholder="Add a Task..."
+            style={{ minWidth: 0 }}
+          />
+          <button
+            className="bg-green-500 text-white px-3 py-2 rounded-lg text-lg ml-2 mb-2 hover:bg-green-400"
+            style={{ height: "100%" }}
+          >
+            Add
+          </button>
+        </div>
+      </form>
+      <ToastContainer />
+    </div>
   );
 }

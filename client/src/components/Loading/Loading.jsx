@@ -1,7 +1,7 @@
 export function Loading() {
   return (
     <div>
-      <span className="loader"></span>
+      <div className="loader"></div>
     </div>
   );
 }

@@ -6,3 +6,35 @@ body {
   background: #202020;
   color: white;
 }
+button {
+  position: relative;
+  overflow: hidden;
+  background-color: #2d3748;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.5rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 0 0 transparent;
+  transition: box-shadow 0.2s ease-out;
+}
+
+button:hover {
+  box-shadow: 0 0 0.5rem 0.25rem rgba(107, 114, 128, 0.4);
+}
+
+button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background-color: rgba(107, 114, 128, 0.2);
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  transition: transform 0.2s ease-out;
+}
+
+button:hover::before {
+  transform: translate(-50%, -50%) scale(2);
+}
