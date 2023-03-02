@@ -45,3 +45,17 @@ export const DELETED_PROJECT = gql`
     }
   }
 `;
+
+export const UPDATED_PROJECT = gql`
+  mutation ($id: ID!, $name: String!, $description: String) {
+    updateProject(_id: $id, name: $name, description: $description) {
+      _id
+      description
+      name
+      tasks {
+        title
+        _id
+      }
+    }
+  }
+`;

@@ -1,6 +1,6 @@
 import Project from "../models/Project.js";
 import Task from "../models/Task.js";
-import { validateText } from "../validations/validations.js";
+import { validateText, validateTask } from "../validations/validations.js";
 
 export const resolvers = {
   Query: {
@@ -28,7 +28,7 @@ export const resolvers = {
       return savedProject;
     },
     createTask: async (_, { title, projectId }) => {
-      if (!validateText(title)) {
+      if (!validateTask(title)) {
         throw new Error("Invalid characters in title");
       }
       const projectFound = await Project.findById(projectId);
@@ -52,7 +52,7 @@ export const resolvers = {
       return updatedProject;
     },
     updateTask: async (_, args) => {
-      if (!validateText(args.title)) {
+      if (!validateTask(args.title)) {
         throw new Error("Invalid characters in title");
       }
       const updatedTask = await Task.findByIdAndUpdate(args._id, args, {

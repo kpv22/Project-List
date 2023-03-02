@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { DELETE_TASK, UPDATE_TASK } from "../../graphql/tasks";
 import {
@@ -19,63 +19,68 @@ export function TasksCard({ task }) {
   });
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(task.title);
-  const [showOptions, setShowOptions] = useState(false);
+  const [originalTitle, setOriginalTitle] = useState(task.title);
   const [showMore, setShowMore] = useState(false);
-  const [updatedTitle, setUpdatedTitle] = useState(title); // new state to hold updated title
+  const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updateTask] = useMutation(UPDATE_TASK, {
     refetchQueries: ["getProject"],
   });
+  const [keyCount, setKeyCount] = useState(0);
+
+  useEffect(() => {
+    setOriginalTitle(title);
+  }, [title]);
 
   const handleEditClick = () => {
     setEditing(true);
+    setOriginalTitle(title);
   };
 
   const handleCancelClick = () => {
     setEditing(false);
-    setTitle(task.title);
-    setUpdatedTitle(title); // reset updated title state as well
+    setTitle(originalTitle);
+    setUpdatedTitle(title); // agregar esta línea
     setShowMore(false);
+    setKeyCount(keyCount + 1);
   };
 
   const handleSaveClick = () => {
-    updateTask({
-      variables: { id: task._id, title: updatedTitle, projectId: params.id }, // update with new title
-    });
-    setTitle(updatedTitle); // set current title to new title
+    if (title !== updatedTitle) {
+      updateTask({
+        variables: { id: task._id, title: updatedTitle, projectId: params.id },
+      });
+      setTitle(updatedTitle);
+      toast.success("Task updated successfully", {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
     setEditing(false);
     setShowMore(false);
-    toast.success("Task updated successfully", {
-      position: "top-left",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
   };
 
   const handleTitleChange = (e) => {
-    setUpdatedTitle(e.target.innerText); // update updated title state
-  };
-
-  const handleShowOptionsClick = () => {
-    setShowOptions(!showOptions);
+    setUpdatedTitle(e.target.innerText);
   };
 
   return (
     <div
       className={`bg-zinc-900 ${
-        editing ? "bg-zinc-800 border border-white border-opacity-20" : ""
+        editing ? "bg-zinc-700 border border-white border-opacity-20" : ""
       } px-5 py-3 mb-2 flex justify-between rounded-lg`}
     >
       <div
+        key={keyCount}
         className={`outline-none text-sm ${editing ? "bg-transparent" : ""}`}
         contentEditable={editing}
         suppressContentEditableWarning={true}
         onInput={handleTitleChange}
-        onBlur={handleSaveClick}
       >
         {title}
       </div>
