@@ -1,6 +1,6 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { BsCheck2All } from "react-icons/bs";
 import {
   DELETED_PROJECT,
@@ -11,26 +11,31 @@ import { TasksList } from "../components/tasks/TasksList";
 import { TasksForm } from "../components/tasks/TasksForm";
 import { Loading } from "../components/Loading/Loading";
 import Swal from "sweetalert2";
-import { AiOutlineCheck, AiOutlineEdit, AiOutlineClose } from "react-icons/ai";
+import { AiOutlineEdit, AiOutlineClose } from "react-icons/ai";
 
 export function ProjectDetails() {
   const params = useParams();
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [updateTitle, setUpdatedTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [updateDescription, setUpdateDescription] = useState("");
   const [editing, setEditing] = useState(false);
 
-  useEffect(() => {
-    if (data && data.project.name && data.project.description) {
-      setTitle(data.project.name);
-      setDescription(data.project.description);
-    }
+  ///////////////////////////////////////////
+  const [newInfo, setNewInfo] = useState({
+    variables: {
+      id: "",
+      name: "",
+      description: "",
+    },
   });
 
   const handleEditClick = () => {
     setEditing(true);
+    setNewInfo({
+      variables: {
+        id: data.project._id,
+        name: data.project.name,
+        description: data.project.description,
+      },
+    });
   };
 
   const { data, loading, error } = useQuery(GET_PROJECT, {
@@ -71,33 +76,31 @@ export function ProjectDetails() {
 
   const handleCancelClick = () => {
     setEditing(false);
-    setTitle(title);
-    setUpdatedTitle(title); // agregar esta línea
   };
 
   const handleSaveClick = () => {
-    if (title !== updateTitle || description !== updateDescription) {
+    if (
+      data.project.name !== newInfo.variables.name ||
+      data.project.description !== newInfo.variables.description
+    ) {
       updateProject({
-        variables: {
-          id: data.project._id,
-          name: updateTitle,
-          description: updateDescription,
-        },
+        variables: newInfo.variables,
       });
-      setTitle(updateTitle);
-      setDescription(updateDescription);
     }
     setEditing(false);
   };
 
-  const handleTitleChange = (e) => {
-    setUpdatedTitle(e.target.innerText);
-    setUpdateDescription(description);
-  };
-
-  const handleDescriptionChange = (e) => {
-    setUpdateDescription(e.target.innerText);
-    setUpdatedTitle(title);
+  const handleChange = (event) => {
+    const name = event.target.dataset.name; // <--- obtenemos el nombre personalizado
+    const value = event.target.innerText;
+    setNewInfo((prevInfo) => {
+      return {
+        variables: {
+          ...prevInfo.variables,
+          [name]: value,
+        },
+      };
+    });
   };
 
   if (loading)
@@ -138,9 +141,10 @@ export function ProjectDetails() {
             className={`outline-none text-sm ${
               editing ? "bg-transparent" : ""
             }`}
+            data-name="name"
             contentEditable={editing}
             suppressContentEditableWarning={true}
-            onInput={handleTitleChange}
+            onInput={handleChange}
           >
             {data.project.name}
           </h1>
@@ -149,9 +153,10 @@ export function ProjectDetails() {
             className={`outline-none text-sm ${
               editing ? "bg-transparent" : ""
             }`}
+            data-name="description"
             contentEditable={editing}
             suppressContentEditableWarning={true}
-            onInput={handleDescriptionChange}
+            onInput={handleChange}
           >
             {data.project.description}
           </p>
