@@ -11,6 +11,10 @@ const taskSchema = new mongoose.Schema(
       ref: "Project",
       required: true,
     },
+    done: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

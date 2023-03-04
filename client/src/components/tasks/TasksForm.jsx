@@ -16,10 +16,16 @@ export function TasksForm() {
     e.preventDefault();
     const title = e.target.title.value;
     try {
+      if (!title.trim()) {
+        e.target.reset();
+        e.target.title.focus();
+        throw new Error("Task cannot be empty");
+      }
       await createTask({
         variables: {
           title,
           projectId: params.id,
+          done: false,
         },
       });
       e.target.reset();
@@ -45,7 +51,7 @@ export function TasksForm() {
           <input
             type="text"
             name="title"
-            className="bg-zinc-900 text-white w-full p-2 rounded-lg mb-0 text-lg"
+            className="bg-zinc-900 text-white w-full  p-2 rounded-lg mb-1 text-lg shadow-black shadow-lg"
             placeholder="Add a Task..."
             style={{ minWidth: 0 }}
           />

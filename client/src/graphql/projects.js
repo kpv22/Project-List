@@ -20,6 +20,7 @@ export const GET_PROJECT = gql`
       tasks {
         _id
         title
+        done
       }
     }
   }
@@ -55,6 +56,7 @@ export const UPDATED_PROJECT = gql`
       tasks {
         title
         _id
+        done
       }
     }
   }

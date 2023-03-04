@@ -1,6 +1,7 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { notFound } from "../components/NotFound/notFound";
 import { useQuery, useMutation } from "@apollo/client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BsCheck2All } from "react-icons/bs";
 import {
   DELETED_PROJECT,
@@ -11,12 +12,14 @@ import { TasksList } from "../components/tasks/TasksList";
 import { TasksForm } from "../components/tasks/TasksForm";
 import { Loading } from "../components/Loading/Loading";
 import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 import { AiOutlineEdit, AiOutlineClose } from "react-icons/ai";
 
 export function ProjectDetails() {
   const params = useParams();
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
+  const [keyCount, setKeyCount] = useState(0);
 
   ///////////////////////////////////////////
   const [newInfo, setNewInfo] = useState({
@@ -76,18 +79,45 @@ export function ProjectDetails() {
 
   const handleCancelClick = () => {
     setEditing(false);
+    setKeyCount(keyCount + 1);
   };
 
   const handleSaveClick = () => {
-    if (
-      data.project.name !== newInfo.variables.name ||
-      data.project.description !== newInfo.variables.description
-    ) {
-      updateProject({
-        variables: newInfo.variables,
+    try {
+      if (!newInfo.variables.name.trim()) {
+        throw new Error("Title field is required");
+      }
+      if (
+        data.project.name !== newInfo.variables.name ||
+        data.project.description !== newInfo.variables.description
+      ) {
+        updateProject({
+          variables: newInfo.variables,
+        });
+        toast.success("Successful Upgrade!", {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+      setEditing(false);
+    } catch (error) {
+      toast.error(`Error upgrading project: ${error.message}`, {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
       });
     }
-    setEditing(false);
   };
 
   const handleChange = (event) => {
@@ -112,7 +142,12 @@ export function ProjectDetails() {
 
   if (error) return <p>{error.message}</p>;
   if (!data || !data.project || !data.project.name) {
-    return <p>Not Project Found</p>;
+    return (
+      <div>
+        {" "}
+        <notFound />{" "}
+      </div>
+    );
   }
   return (
     <div style={{ width: "80%" }}>
@@ -137,7 +172,7 @@ export function ProjectDetails() {
       >
         <div>
           <h1 className="text-gray-500">Title</h1>
-          <h1
+          <p
             className={`outline-none text-sm ${
               editing ? "bg-transparent" : ""
             }`}
@@ -145,9 +180,10 @@ export function ProjectDetails() {
             contentEditable={editing}
             suppressContentEditableWarning={true}
             onInput={handleChange}
+            key={keyCount + 1}
           >
             {data.project.name}
-          </h1>
+          </p>
           <h1 className="text-gray-500">Description</h1>
           <p
             className={`outline-none text-sm ${
@@ -157,6 +193,7 @@ export function ProjectDetails() {
             contentEditable={editing}
             suppressContentEditableWarning={true}
             onInput={handleChange}
+            key={keyCount}
           >
             {data.project.description}
           </p>

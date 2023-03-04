@@ -11,8 +11,8 @@ export const typeDefs = gql`
     createProject(name: String, description: String): Project
     updateProject(_id: ID!, name: String!, description: String): Project
     deleteProject(_id: ID!): Project
-    createTask(title: String, projectId: ID): Task
-    updateTask(_id: ID!, title: String!, projectId: ID!): Task
+    createTask(title: String, projectId: ID, done: Boolean): Task
+    updateTask(_id: ID!, title: String!, projectId: ID!, done: Boolean): Task
     deleteTask(_id: ID!): Task
   }
   type Project {
@@ -27,6 +27,7 @@ export const typeDefs = gql`
     _id: ID
     title: String
     project: Project
+    done: Boolean
     createdAt: String
     updatedAt: String
   }
