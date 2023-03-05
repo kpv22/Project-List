@@ -126,6 +126,11 @@ export function TasksCard({ task }) {
         contentEditable={editing}
         suppressContentEditableWarning={true}
         onInput={handleTitleChange}
+        style={{
+          overflowWrap: "break-word",
+          maxHeight: "100px",
+          overflowY: "auto",
+        }}
       >
         {title}
       </div>
