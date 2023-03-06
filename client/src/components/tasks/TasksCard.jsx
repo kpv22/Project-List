@@ -52,6 +52,9 @@ export function TasksCard({ task }) {
           // Agregar validación adicional
           throw new Error("Title cannot be empty");
         }
+        if (updatedTitle.length > 120) {
+          throw new Error("Title cannot be longer than 120 characters");
+        }
         updateTask({
           variables: {
             id: task._id,
@@ -109,7 +112,6 @@ export function TasksCard({ task }) {
     }
   };
 
-  console.log(isDone);
   return (
     <div
       className={`bg-zinc-900 shadow-lg ${

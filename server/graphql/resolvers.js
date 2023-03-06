@@ -51,6 +51,10 @@ export const resolvers = {
     },
 
     updateTask: async (_, args) => {
+      console.log(args.title);
+      if (!validateText(args.title)) {
+        throw new Error("Invalid characters in name or description");
+      }
       const updatedTask = await Task.findByIdAndUpdate(args._id, args, {
         new: true,
       });

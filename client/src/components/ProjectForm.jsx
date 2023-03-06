@@ -9,8 +9,7 @@ export function ProjectForm() {
     name: "",
     description: "",
   });
-
-  const [showAlert, setShowAlert] = useState(false);
+  const [error1, setError1] = useState("");
 
   const [createProject, { loading, error }] = useMutation(CREATE_PROJECT, {
     refetchQueries: ["getProjects"],
@@ -25,6 +24,10 @@ export function ProjectForm() {
 
   const handleSudmit = (e) => {
     e.preventDefault(e);
+    if (project.name.length > 120 || project.description.length > 120) {
+      setError1("Title or description cannot be longer than 120 characters");
+      return;
+    }
     createProject({
       variables: {
         name: project.name,
@@ -44,25 +47,26 @@ export function ProjectForm() {
         });
       })
       .catch((error) => {
-        setShowAlert(true);
+        setError1(error.message);
       });
   };
 
   useEffect(() => {
-    if (showAlert) {
+    if (error1) {
+      toast.error(error1, {
+        position: "top-left",
+        closeOnClick: true,
+        autoClose: 3000,
+        theme: "dark",
+      });
       setTimeout(() => {
-        setShowAlert(false);
+        setError1("");
       }, 3000);
     }
-  }, [showAlert]);
+  }, [error1]);
 
   return (
     <form onSubmit={handleSudmit} className="w-4/5">
-      {showAlert && (
-        <div className="bg-red-500 text-white p-3 rounded-lg mb-3">
-          <p>{error.message}</p>
-        </div>
-      )}
       <input
         type="text"
         name="name"

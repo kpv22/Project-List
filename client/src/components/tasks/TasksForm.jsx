@@ -21,6 +21,9 @@ export function TasksForm() {
         e.target.title.focus();
         throw new Error("Task cannot be empty");
       }
+      if (title.length > 120) {
+        throw new Error("Title cannot be longer than 120 characters");
+      }
       await createTask({
         variables: {
           title,

@@ -1,4 +1,4 @@
 export const validateText = (text) => {
-  const regex = /^[^<>]{1,90}$/;
+  const regex = /^[^<>]{1,60}$/;
   return regex.test(text);
 };
