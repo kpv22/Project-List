@@ -15,11 +15,7 @@ export async function startApolloServer(typeDefs, resolvers, port) {
 
   await server.start();
 
-  app.use(
-    cors({ origin: "https://project-manager-henna.vercel.app" }),
-    express.json(),
-    expressMiddleware(server)
-  );
+  app.use(cors(), express.json(), expressMiddleware(server));
 
   await new Promise((resolve) =>
     httpServer.listen(
