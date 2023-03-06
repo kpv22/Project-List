@@ -4,7 +4,7 @@ import { expressMiddleware } from "@apollo/server/express4";
 import cors from "cors";
 import http from "http";
 
-export async function startApolloServer(typeDefs, resolvers) {
+export async function startApolloServer(typeDefs, resolvers, port) {
   const app = express();
   const httpServer = http.createServer(app);
 
@@ -24,10 +24,10 @@ export async function startApolloServer(typeDefs, resolvers) {
   await new Promise((resolve) =>
     httpServer.listen(
       {
-        port: 4000,
+        port,
       },
       resolve
     )
   );
-  console.log("Server ready at http://localhost:4000/graphql");
+  console.log(`Server ready at http://localhost:${port}/graphql`);
 }
