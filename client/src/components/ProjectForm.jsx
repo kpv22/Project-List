@@ -24,8 +24,8 @@ export function ProjectForm() {
 
   const handleSudmit = (e) => {
     e.preventDefault(e);
-    if (project.name.length > 120 || project.description.length > 120) {
-      setError1("Title or description cannot be longer than 120 characters");
+    if (project.name.length > 120) {
+      setError1("Title cannot be longer than 120 characters");
       return;
     }
     createProject({
