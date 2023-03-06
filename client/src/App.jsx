@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const client = new ApolloClient({
-  uri: "https://project-manager-henna.vercel.app",
+  uri: "https://project-manager-henna.vercel.app/projects",
   cache: new InMemoryCache(),
 });
 
