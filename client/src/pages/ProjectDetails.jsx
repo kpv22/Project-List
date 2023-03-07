@@ -41,7 +41,7 @@ export function ProjectDetails() {
     });
   };
 
-  const { data, loading, error } = useQuery(GET_PROJECT, {
+  const { data, loading, error, refetch } = useQuery(GET_PROJECT, {
     variables: {
       id: params.id,
     },
@@ -51,8 +51,9 @@ export function ProjectDetails() {
   });
 
   const [deleteProject] = useMutation(DELETED_PROJECT, {
-    refetchQueries: ["getProjects", "getProject"],
+    refetchQueries: ["getProjects"],
     onCompleted: () => {
+      refetch();
       navigate("/projects");
     },
   });
