@@ -11,6 +11,9 @@ export async function startApolloServer(typeDefs, resolvers) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    cors: {
+      origin: "*", // Permitir todas las solicitudes de origen cruzado
+    },
   });
 
   await server.start();

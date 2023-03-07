@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const client = new ApolloClient({
-  uri: "https://project-manager-henna.vercel.app/graphql",
+  uri: "https://project-manager-production.up.railway.app/graphql",
   cache: new InMemoryCache(),
 });
 
