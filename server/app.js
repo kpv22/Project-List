@@ -20,7 +20,8 @@ export async function startApolloServer(typeDefs, resolvers) {
   await new Promise((resolve) =>
     httpServer.listen(
       {
-        port: 4000,
+        port: process.env.PORT || 4000,
+        host: "0.0.0.0",
       },
       resolve
     )
