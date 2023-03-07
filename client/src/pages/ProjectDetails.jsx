@@ -1,4 +1,5 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
+
 import { notFound } from "../components/NotFound/notFound";
 import { useQuery, useMutation } from "@apollo/client";
 import { useState, useEffect } from "react";

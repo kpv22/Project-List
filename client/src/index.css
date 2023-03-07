@@ -38,3 +38,10 @@ button::before {
 button:hover::before {
   transform: translate(-50%, -50%) scale(2);
 }
+
+.img {
+  height: 2rem;
+}
+.footer {
+  width: 90vw;
+}
