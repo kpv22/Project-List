@@ -14,13 +14,14 @@ import { Loading } from "../components/Loading/Loading";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { AiOutlineEdit, AiOutlineClose } from "react-icons/ai";
+import { useApolloClient } from "@apollo/client";
 
 export function ProjectDetails() {
   const params = useParams();
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
   const [keyCount, setKeyCount] = useState(0);
-
+  const client = useApolloClient();
   ///////////////////////////////////////////
   const [newInfo, setNewInfo] = useState({
     variables: {
@@ -41,7 +42,7 @@ export function ProjectDetails() {
     });
   };
 
-  const { data, loading, error, refetch } = useQuery(GET_PROJECT, {
+  const { data, loading, error } = useQuery(GET_PROJECT, {
     variables: {
       id: params.id,
     },
@@ -53,7 +54,7 @@ export function ProjectDetails() {
   const [deleteProject] = useMutation(DELETED_PROJECT, {
     refetchQueries: ["getProjects"],
     onCompleted: () => {
-      refetch();
+      client.resetStore();
       navigate("/projects");
     },
   });
